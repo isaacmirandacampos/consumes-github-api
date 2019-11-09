@@ -49,9 +49,9 @@ export default class Main extends Component {
         name: response.data.full_name,
       };
 
-      if (await repositories.find(newRepo)) {
-        throw new Error();
-      }
+      repositories.map(repository =>
+        repository === newRepo ? new Error() : repository
+      );
 
       this.setState({
         repositories: [...repositories, data],
