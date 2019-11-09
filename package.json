@@ -1,5 +1,5 @@
 {
-  "name": "module05",
+  "name": "consumesGithubApi",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

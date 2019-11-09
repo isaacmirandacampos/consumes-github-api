@@ -6,7 +6,7 @@ export const Form = styled.form`
   flex-direction: row;
   input {
     flex: 1;
-    border: 1px solid #eee;
+    border: 1px solid;
     padding: 10px 15px;
     border-radius: 4px;
     font-size: 16px;
@@ -21,7 +21,6 @@ const rotate = keyframes`
     transform: rotate(360deg);
   }
   `;
-
 export const SubmitButton = styled.button.attrs(props => ({
   type: 'submit',
   disabled: props.loading,

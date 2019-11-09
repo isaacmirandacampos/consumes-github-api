@@ -12,6 +12,7 @@ export default class Main extends Component {
     newRepo: '',
     repositories: [],
     loading: false,
+    errorColor: '#eee',
   };
 
   // carregar os dados do localStorage
@@ -31,31 +32,40 @@ export default class Main extends Component {
   }
 
   handleInputChange = e => {
-    this.setState({ newRepo: e.target.value });
+    this.setState({ newRepo: e.target.value, errorColor: '#eee' });
   };
 
   handleSubmit = async e => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
 
-    this.setState({ loading: true });
+      this.setState({ loading: true });
 
-    const { newRepo, repositories } = this.state;
+      const { newRepo, repositories, errorColor } = this.state;
 
-    const response = await api.get(`/repos/${newRepo}`);
+      const response = await api.get(`/repos/${newRepo}`);
 
-    const data = {
-      name: response.data.full_name,
-    };
+      const data = {
+        name: response.data.full_name,
+      };
 
-    this.setState({
-      repositories: [...repositories, data],
-      newRepo: '',
-      loading: false,
-    });
+      if (await repositories.find(newRepo)) {
+        throw new Error();
+      }
+
+      this.setState({
+        repositories: [...repositories, data],
+        newRepo: '',
+        loading: false,
+      });
+    } catch (err) {
+      this.setState({ newRepo: '', loading: false, errorColor: '#ff0000' });
+      return new Error(err);
+    }
   };
 
   render() {
-    const { newRepo, repositories, loading } = this.state;
+    const { newRepo, repositories, loading, errorColor } = this.state;
     return (
       <Container>
         <h1>
@@ -65,6 +75,7 @@ export default class Main extends Component {
 
         <Form onSubmit={this.handleSubmit}>
           <input
+            style={{ borderColor: errorColor }}
             type="text"
             placeholder="Adicionar repositório"
             value={newRepo}

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import api from '../../services/api';
 
 import Container from '../../components/container';
-import { Loading, Owner, IssuesList } from './styles';
+import { Loading, Owner, IssuesList, ListBox, Page } from './styles';
 
 export default class Repository extends Component {
   PropTypes = {
@@ -19,19 +19,20 @@ export default class Repository extends Component {
     repository: {},
     issues: [],
     loading: true,
+    issuesState: 'all',
   };
 
   async componentDidMount() {
     const { match } = this.props;
-
+    const { issuesState } = this.state;
     const repoName = decodeURIComponent(match.params.repository);
 
     const [repository, issues] = await Promise.all([
       api.get(`/repos/${repoName}`),
       api.get(`/repos/${repoName}/issues`, {
         params: {
-          state: 'open',
-          per_page: 5,
+          state: issuesState,
+          per_page: 30,
         },
       }),
     ]);
@@ -43,8 +44,38 @@ export default class Repository extends Component {
     });
   }
 
+  handleChecked = async e => {
+    if (e.target.value === 'Todos') {
+      this.setState({ issuesState: 'all' });
+    } else if (e.target.value === 'Abertos') {
+      this.setState({ issuesState: 'open' });
+    } else if (e.target.value === 'Fechados') {
+      this.setState({ issuesState: 'closed' });
+    }
+    const { match } = this.props;
+    const { issuesState } = this.state;
+    const repoName = decodeURIComponent(match.params.repository);
+
+    const [repository, issues] = await Promise.all([
+      api.get(`/repos/${repoName}`),
+      api.get(`/repos/${repoName}/issues`, {
+        params: {
+          state: issuesState,
+          per_page: 30,
+          page: 2,
+        },
+      }),
+    ]);
+    this.setState({
+      repository: repository.data,
+      issues: issues.data,
+      loading: false,
+    });
+  };
+
   render() {
     const { repository, issues, loading } = this.state;
+    const arrayOptions = ['Todos', 'Abertos', 'Fechados'];
 
     if (loading) {
       return <Loading>Carregando</Loading>;
@@ -58,6 +89,25 @@ export default class Repository extends Component {
           <h1>{repository.name}</h1>
           <p>{repository.description}</p>
         </Owner>
+        <ListBox>
+          <h2>Listar repositórios:</h2>
+          {arrayOptions.map(arrayOption => (
+            <div>
+              <input
+                type="radio"
+                name="issue"
+                id={arrayOption}
+                value={arrayOption}
+                onChange={this.handleChecked}
+              />
+              <label htmlFor={arrayOption}>{arrayOption}</label>
+            </div>
+          ))}
+        </ListBox>
+        <Page>
+          <button onSubmit={this.handle}>Voltar página</button>
+          <button>Pŕoxima Página</button>
+        </Page>
         <IssuesList>
           {issues.map(issue => (
             <li key={String(issue.id)}>

@@ -96,3 +96,51 @@ export const IssuesList = styled.ul`
     }
   }
 `;
+export const ListBox = styled.form`
+  display: flex;
+  margin-top: 25px;
+  background-image: linear-gradient(105deg, #7159c1, violet);
+  align-items: center;
+  padding: 5px;
+  border-radius: 4px;
+
+  div {
+    margin-left: 15px;
+    display: flex;
+    padding: 8px 20px;
+    align-items: center;
+    border-radius: 8px;
+    background-color: #fff;
+  }
+
+  label,
+  h2 {
+    margin: 0 8px;
+    font-weight: 600;
+    font-size: 18px;
+    color: #000;
+  }
+  h2 {
+    color: #fff;
+  }
+`;
+
+export const Page = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px auto;
+
+  button {
+    color: #fff;
+    padding: 5px 10px;
+    background-image: linear-gradient(105deg, #7159c1, violet);
+    border-radius: 7px;
+    border: 0;
+
+    & + button {
+      margin-left: 10px;
+      background-image: linear-gradient(105deg, #7159c1, violet);
+    }
+  }
+`;
