@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import { RectButton } from 'react-native-gesture-handler';
 
 export const Container = styled.View`
   flex: 1;
@@ -70,3 +71,19 @@ export const Author = styled.Text`
   margin-top: 2px;
 `;
 export const Loading = styled.View``;
+
+export const SubmitWebview = styled(RectButton)`
+  height: 40px;
+  width: 240px;
+  background-color: #7159c1;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  border-radius: 4px;
+  border: 1px solid #7159c1;
+`;
+export const TextSubmit = styled.Text`
+  color: #fff;
+  font-weight: bold;
+  font-size: 18px;
+`;

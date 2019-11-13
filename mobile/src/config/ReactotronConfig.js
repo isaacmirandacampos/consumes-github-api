@@ -5,3 +5,5 @@ const tron = Reactotron.configure()
   .connect();
 
 console.tron = tron;
+
+Reactotron.clear();
